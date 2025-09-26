@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Popbill Taxinvoice</title>
+</head>
+<body>
+<div>
+    <p>Response</p>
+    <br/>
+    <fieldset>
+        <ul>
+            <li>응답코드 (Response.code) : <%= code %></li>
+            <li>응답메시지 (Response.message) : <%= message %></li>
+            <% if (typeof ntsConfirmNum  != 'undefined') { %>
+              <li>국세청승인번호 (Response.ntsConfirmNum) : <%= ntsConfirmNum %></li>
+            <% } %>
+        </ul>
+    </fieldset>
+</div>
+</body>
+</html>
