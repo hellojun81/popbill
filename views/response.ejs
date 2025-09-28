@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Popbill Taxinvoice</title>
+    <title>Popbill Node.js Example</title>
 </head>
 <body>
 <div>
     <p>Response</p>
     <br/>
     <fieldset>
+        <legend><%= path %></legend>
         <ul>
-            <li>응답코드 (Response.code) : <%= code %></li>
-            <li>응답메시지 (Response.message) : <%= message %></li>
-            <% if (typeof ntsConfirmNum  != 'undefined') { %>
-              <li>국세청승인번호 (Response.ntsConfirmNum) : <%= ntsConfirmNum %></li>
-            <% } %>
+            <li>JobID(작업아이디) : <%= result %></li>
         </ul>
     </fieldset>
 </div>

@@ -7,7 +7,7 @@ var popbill = require('popbill');
 const app = express();
 const path = require('path');
 app.set('views', path.join(__dirname, 'views')); // 템플릿 폴더
-app.set('view engine', 'ejs');   
+app.set('view engine', 'ejs');
 
 
 app.use(cors());
@@ -18,29 +18,29 @@ app.use(morgan('dev'));
 
 var popbill = require('popbill');
 
-popbill.config( {
+popbill.config({
 
-  // 링크아이디
-  LinkID :'TAULAPI',
+    // 링크아이디
+    LinkID: 'TAULAPI',
 
-  // 비밀키
-  SecretKey : 'flPQQ9rGSa2psxZQ8Yr4IxAASafmTrucjDbXn5R0DuQ',
+    // 비밀키
+    SecretKey: 'flPQQ9rGSa2psxZQ8Yr4IxAASafmTrucjDbXn5R0DuQ',
 
-  // 연동환경 설정, true-테스트, false-운영(Production), (기본값:false)
-  IsTest : true,
+    // 연동환경 설정, true-테스트, false-운영(Production), (기본값:false)
+    IsTest: true,
 
-  // 통신 IP 고정, true-사용, false-미사용, (기본값:true)
-  IPRestrictOnOff: true,
+    // 통신 IP 고정, true-사용, false-미사용, (기본값:true)
+    IPRestrictOnOff: true,
 
-  // 팝빌 API 서비스 고정 IP 사용여부, 기본값(false)
-  UseStaticIP: false,
+    // 팝빌 API 서비스 고정 IP 사용여부, 기본값(false)
+    UseStaticIP: false,
 
-  // 로컬시스템 시간 사용여부, true-사용, false-미사용, (기본값:true)
-  UseLocalTimeYN: true,
+    // 로컬시스템 시간 사용여부, true-사용, false-미사용, (기본값:true)
+    UseLocalTimeYN: true,
 
-  defaultErrorHandler: function (Error) {
-    console.log('Error Occur : [' + Error.code + '] ' + Error.message);
-  }
+    defaultErrorHandler: function (Error) {
+        console.log('Error Occur : [' + Error.code + '] ' + Error.message);
+    }
 
 });
 
@@ -56,6 +56,33 @@ var easyFinBankService = popbill.EasyFinBankService();
  * - 검색기간은 현재일 기준 90일 이내로만 요청할 수 있습니다.
  * - 수집 요청후 반환받은 작업아이디(JobID)의 유효시간은 1시간 입니다.
  */
+app.get('/getBankAccountInfo', function (req, res, next) {
+  const corpNum = '1498802941';          // '-' 없이 10자리
+  const bankCode = '0003';
+  const accountNumber = '02716229704021';
+  const userID = 'TAULAPI';              // 팝빌 아이디
+
+  easyFinBankService.getBankAccountInfo(
+    corpNum,
+    bankCode,
+    accountNumber,
+    userID,
+    // 성공 콜백
+    function (info) {
+      // info 예: { bankCode, accountNumber, accountName, ... }
+      res.json({ ok: true, info });
+    },
+    // 실패 콜백
+    function (err) {
+      res.status(500).json({
+        ok: false,
+        code: err.code,
+        message: err.message,
+      });
+    }
+  );
+
+});
 app.get('/requestJob', function (req, res, next) {
 
     // 팝빌회원 사업자번호, '-' 제외 10자리
@@ -72,6 +99,7 @@ app.get('/requestJob', function (req, res, next) {
 
     // 종료일자, 날짜형식(yyyyMMdd)
     var EDate = '20250926';
+
 
     easyFinBankService.requestJob(testCorpNum, bankCode, accountNumber, SDate, EDate,
         function (jobID) {
@@ -327,9 +355,9 @@ app.get('/registIssue', function (req, res, next) {
 
     taxinvoiceService.registIssue(testCorpNum, Taxinvoice,
         function (result) {
-            res.render('response', {path: req.path, code: result.code, message: result.message, ntsConfirmNum: result.ntsConfirmNum});
+            res.render('response', { path: req.path, code: result.code, message: result.message, ntsConfirmNum: result.ntsConfirmNum });
         }, function (Error) {
-            res.render('response', {path: req.path, code: Error.code, message: Error.message});
+            res.render('response', { path: req.path, code: Error.code, message: Error.message });
         });
 });
 app.get('/popbillTest', function (req, res, next) {
